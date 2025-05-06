@@ -65,7 +65,7 @@ class EzChart extends StatefulWidget {
   const EzChart({
     super.key,
     required this.candles,
-    this.initialVisibleCandleCount = 90,
+    this.initialVisibleCandleCount = 14,
     ChartStyle? style,
     this.timeLabel,
     this.priceLabel,
@@ -318,10 +318,12 @@ class _EzChartState extends State<EzChart> {
 
     if (visibleDataCount > 20) {
       // If more than 20 data points are visible, we should show year and month.
-      return "${date[0]}-${date[1]}"; // yyyy-mm
+      // return "${date[0]}-${date[1]}"; // yyyy-mm
+      return date[1]; // yyyy-mm
     } else {
       // Otherwise, we should show month and date.
-      return "${date[1]}-${date[2]}"; // mm-dd
+      // return "${date[1]}-${date[2]}"; // mm-dd
+      return date[1]; // mm-dd
     }
   }
 

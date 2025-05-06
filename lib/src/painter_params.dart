@@ -41,7 +41,7 @@ class PainterParams {
       size.width - style.priceLabelWidth;
 
   double get chartHeight => // height without time labels
-      size.height - style.timeLabelHeight;
+      size.height;
 
   double get volumeHeight => chartHeight * style.volumeHeightFactor;
 

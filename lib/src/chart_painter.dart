@@ -27,7 +27,9 @@ class ChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Draw time labels (dates) & price labels
-    _drawTimeLabels(canvas, params);
+    // _drawTimeLabels(canvas, params);
+
+    //Price line
     _drawPriceGridAndLabels(canvas, params);
 
     // Draw prices, volumes & trend line
@@ -36,9 +38,7 @@ class ChartPainter extends CustomPainter {
       Offset.zero &
           Size(
             params.chartWidth,
-            visibleVolume
-                ? params.chartHeight
-                : params.chartHeight - params.volumeHeight,
+            params.chartHeight + params.style.timeLabelHeight,
           ),
     );
     // canvas.drawRect(
@@ -60,41 +60,26 @@ class ChartPainter extends CustomPainter {
     }
   }
 
-  void _drawTimeLabels(canvas, PainterParams params) {
-    // We draw one time label per 90 pixels of screen width
-
-    final lineCount = params.chartWidth ~/ 90;
-    final gap = 1 / (lineCount + 1);
-    for (int i = 1; i <= lineCount; i++) {
-      double x = i * gap * params.chartWidth;
-      final index = params.getCandleIndexFromOffset(x);
-      if (index < params.candles.length) {
-        final candle = params.candles[index];
-        final visibleDataCount = params.candles.length;
-        final timeTp =
-            TextPainter(
-                text: TextSpan(
-                  text: '$index',
-                  style: params.style.timeLabelStyle,
-                ),
-              )
-              ..textDirection = TextDirection.ltr
-              ..layout();
-
-        // Align texts towards vertical bottom
-        final topPadding = params.style.timeLabelHeight - timeTp.height;
-        timeTp.paint(
-          canvas,
-          Offset(
-            x - timeTp.width / 2,
-            (!visibleVolume)
-                ? (params.chartHeight + topPadding) - params.volumeHeight
-                : params.chartHeight + topPadding,
-          ),
-        );
-      }
-    }
-  }
+  // void _drawTimeLabels(canvas, PainterParams params) {
+  //   // We draw one time label per 90 pixels of screen width
+  //   for (int i = 0; i < params.candles.length; i++) {
+  //     // _drawSingleDay(canvas, params, i);
+  //     // final visibleDataCount = params.candles.length;
+  //     final x = i * params.candleWidth;
+  //     final timeTp =
+  //         TextPainter(
+  //             text: TextSpan(
+  //               // text: getTimeLabel(candle.timestamp, visibleDataCount),
+  //               text: "$i",
+  //               style: params.style.timeLabelStyle,
+  //             ),
+  //           )
+  //           ..textDirection = TextDirection.ltr
+  //           ..layout();
+  //     final labelX = x + (params.candleWidth - timeTp.width) / 2;
+  //     timeTp.paint(canvas, Offset(labelX, params.chartHeight));
+  //   }
+  // }
 
   void _drawPriceGridAndLabels(canvas, PainterParams params) {
     [0.0, 0.25, 0.5, 0.75, 1.0]
@@ -158,6 +143,25 @@ class ChartPainter extends CustomPainter {
         );
       }
     }
+    final visibleDataCount = params.candles.length;
+    final timeTp =
+        TextPainter(
+            text: TextSpan(
+              text: getTimeLabel(candle.timestamp, visibleDataCount),
+              style: params.style.timeLabelStyle,
+            ),
+          )
+          ..textDirection = TextDirection.ltr
+          ..layout();
+    timeTp.paint(
+      canvas,
+      Offset(
+        x - timeTp.width / 2,
+        visibleVolume
+            ? params.chartHeight
+            : params.chartHeight - params.volumeHeight,
+      ),
+    );
     // Draw volume bar
     final volume = candle.volume;
     if (volume != null && visibleVolume) {
@@ -169,6 +173,7 @@ class ChartPainter extends CustomPainter {
           ..color = params.style.volumeColor,
       );
     }
+
     // Draw trend line
     for (int j = 0; j < candle.trends.length; j++) {
       final trendLinePaint =
@@ -226,9 +231,10 @@ class ChartPainter extends CustomPainter {
       Offset(i * params.candleWidth, 0.0),
       Offset(
         i * params.candleWidth,
-        visibleVolume
-            ? params.chartHeight
-            : params.chartHeight - params.volumeHeight,
+        params.chartHeight,
+        // visibleVolume
+        //     ? params.chartHeight
+        //     : params.chartHeight - params.volumeHeight,
       ),
       Paint()
         ..strokeWidth = max(params.candleWidth * 0.88, 1.0)

@@ -58,7 +58,7 @@ class ChartStyle {
     this.volumeHeightFactor = 0.2,
     this.priceLabelWidth = 48.0,
     this.timeLabelHeight = 24.0,
-    this.timeLabelStyle = const TextStyle(fontSize: 16, color: Colors.grey),
+    this.timeLabelStyle = const TextStyle(fontSize: 12, color: Colors.grey),
     this.priceLabelStyle = const TextStyle(fontSize: 12, color: Colors.grey),
     this.overlayTextStyle = const TextStyle(fontSize: 16, color: Colors.white),
     this.priceGainColor = Colors.green,
