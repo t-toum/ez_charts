@@ -14,12 +14,14 @@ class ChartPainter extends CustomPainter {
   final TimeLabelGetter getTimeLabel;
   final PriceLabelGetter getPriceLabel;
   final OverlayInfoGetter getOverlayInfo;
+  final bool visibleVolume;
 
   ChartPainter({
     required this.params,
     required this.getTimeLabel,
     required this.getPriceLabel,
     required this.getOverlayInfo,
+    this.visibleVolume = true,
   });
 
   @override
@@ -74,7 +76,10 @@ class ChartPainter extends CustomPainter {
         final topPadding = params.style.timeLabelHeight - timeTp.height;
         timeTp.paint(
           canvas,
-          Offset(x - timeTp.width / 2, params.chartHeight + topPadding),
+          Offset(
+            x - timeTp.width / 2,
+            (!visibleVolume) ? (params.chartHeight + topPadding)- params.volumeHeight : params.chartHeight + topPadding,
+          ),
         );
       }
     }
@@ -144,7 +149,7 @@ class ChartPainter extends CustomPainter {
     }
     // Draw volume bar
     final volume = candle.volume;
-    if (volume != null) {
+    if (volume != null && visibleVolume) {
       canvas.drawLine(
         Offset(x, params.chartHeight),
         Offset(x, params.fitVolume(volume)),

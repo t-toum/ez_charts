@@ -1,7 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:ez_charts/ez_charts.dart';
-
 void main() {
   test('adds one to input values', () {
     // final calculator = Calculator();

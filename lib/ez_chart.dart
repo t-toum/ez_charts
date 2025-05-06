@@ -60,6 +60,8 @@ class EzChart extends StatefulWidget {
   /// This provides the width of a candlestick at the current zoom level.
   final ValueChanged<double>? onCandleResize;
 
+  final bool visibleVolume;
+
   const EzChart({
     super.key,
     required this.candles,
@@ -70,6 +72,7 @@ class EzChart extends StatefulWidget {
     this.overlayInfo,
     this.onTap,
     this.onCandleResize,
+    this.visibleVolume = true,
   }) : style = style ?? const ChartStyle(),
        assert(
          candles.length >= 3,
@@ -193,6 +196,7 @@ class _EzChartState extends State<EzChart> {
                 size: size,
                 painter: ChartPainter(
                   params: params,
+                  visibleVolume: widget.visibleVolume,
                   getTimeLabel: widget.timeLabel ?? defaultTimeLabel,
                   getPriceLabel: widget.priceLabel ?? defaultPriceLabel,
                   getOverlayInfo: widget.overlayInfo ?? defaultOverlayInfo,

@@ -55,10 +55,10 @@ class _MyAppState extends State<MyApp> {
           child: EzChart(
             /** Only [candles] is required */
             candles: _data,
-            timeLabel: (int timestamp, int visibleDataCount){
-              print("timestamp: $timestamp, visibleDataCount: $visibleDataCount");
-              return "";
-            },
+            // timeLabel: (int timestamp, int visibleDataCount){
+            //   print("timestamp: $timestamp, visibleDataCount: $visibleDataCount");
+            //   return "";
+            // },
             /** Uncomment the following for examples on optional parameters */
 
             /** Example styling */
