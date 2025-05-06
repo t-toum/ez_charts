@@ -32,7 +32,15 @@ class ChartPainter extends CustomPainter {
 
     // Draw prices, volumes & trend line
     canvas.save();
-    canvas.clipRect(Offset.zero & Size(params.chartWidth, params.chartHeight));
+    canvas.clipRect(
+      Offset.zero &
+          Size(
+            params.chartWidth,
+            visibleVolume
+                ? params.chartHeight
+                : params.chartHeight - params.volumeHeight,
+          ),
+    );
     // canvas.drawRect(
     //   // apply yellow tint to clipped area (for debugging)
     //   Offset.zero & Size(params.chartWidth, params.chartHeight),
@@ -54,6 +62,7 @@ class ChartPainter extends CustomPainter {
 
   void _drawTimeLabels(canvas, PainterParams params) {
     // We draw one time label per 90 pixels of screen width
+
     final lineCount = params.chartWidth ~/ 90;
     final gap = 1 / (lineCount + 1);
     for (int i = 1; i <= lineCount; i++) {
@@ -65,7 +74,7 @@ class ChartPainter extends CustomPainter {
         final timeTp =
             TextPainter(
                 text: TextSpan(
-                  text: getTimeLabel(candle.timestamp, visibleDataCount),
+                  text: '$index',
                   style: params.style.timeLabelStyle,
                 ),
               )
@@ -78,7 +87,9 @@ class ChartPainter extends CustomPainter {
           canvas,
           Offset(
             x - timeTp.width / 2,
-            (!visibleVolume) ? (params.chartHeight + topPadding)- params.volumeHeight : params.chartHeight + topPadding,
+            (!visibleVolume)
+                ? (params.chartHeight + topPadding) - params.volumeHeight
+                : params.chartHeight + topPadding,
           ),
         );
       }
@@ -213,7 +224,12 @@ class ChartPainter extends CustomPainter {
     // Draw highlight bar (selection box)
     canvas.drawLine(
       Offset(i * params.candleWidth, 0.0),
-      Offset(i * params.candleWidth, params.chartHeight),
+      Offset(
+        i * params.candleWidth,
+        visibleVolume
+            ? params.chartHeight
+            : params.chartHeight - params.volumeHeight,
+      ),
       Paint()
         ..strokeWidth = max(params.candleWidth * 0.88, 1.0)
         ..color = params.style.selectionHighlightColor,
