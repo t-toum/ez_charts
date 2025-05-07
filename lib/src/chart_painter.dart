@@ -34,13 +34,7 @@ class ChartPainter extends CustomPainter {
 
     // Draw prices, volumes & trend line
     canvas.save();
-    canvas.clipRect(
-      Offset.zero &
-          Size(
-            params.chartWidth,
-            params.chartHeight + params.style.timeLabelHeight,
-          ),
-    );
+    canvas.clipRect(Offset.zero & Size(params.chartWidth, params.chartHeight + params.style.timeLabelHeight));
     // canvas.drawRect(
     //   // apply yellow tint to clipped area (for debugging)
     //   Offset.zero & Size(params.chartWidth, params.chartHeight),
@@ -115,7 +109,7 @@ class ChartPainter extends CustomPainter {
     final candle = params.candles[i];
     final x = i * params.candleWidth;
     final thickWidth = max(params.candleWidth * 0.8, 0.8);
-    final thinWidth = max(params.candleWidth * 0.2, 0.2);
+    final thinWidth = max(params.candleWidth * 0.05, 0.2);
     // Draw price bar
     final open = candle.open;
     final close = candle.close;
@@ -153,15 +147,7 @@ class ChartPainter extends CustomPainter {
           )
           ..textDirection = TextDirection.ltr
           ..layout();
-    timeTp.paint(
-      canvas,
-      Offset(
-        x - timeTp.width / 2,
-        visibleVolume
-            ? params.chartHeight
-            : params.chartHeight - params.volumeHeight,
-      ),
-    );
+    timeTp.paint(canvas, Offset(x - timeTp.width/2, visibleVolume ? params.chartHeight : params.chartHeight - params.volumeHeight));
     // Draw volume bar
     final volume = candle.volume;
     if (volume != null && visibleVolume) {

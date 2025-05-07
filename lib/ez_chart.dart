@@ -315,15 +315,12 @@ class _EzChartState extends State<EzChart> {
     final date = DateTime.fromMillisecondsSinceEpoch(
       timestamp,
     ).toIso8601String().split("T").first.split("-");
-
     if (visibleDataCount > 20) {
       // If more than 20 data points are visible, we should show year and month.
-      // return "${date[0]}-${date[1]}"; // yyyy-mm
-      return date[1]; // yyyy-mm
+      return "${date[0]}-${date[1]}"; // yyyy-mm
     } else {
       // Otherwise, we should show month and date.
-      // return "${date[1]}-${date[2]}"; // mm-dd
-      return date[1]; // mm-dd
+      return "${date[1]}-${date[2]}"; // mm-dd
     }
   }
 
