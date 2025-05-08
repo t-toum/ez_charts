@@ -1,7 +1,7 @@
 name: ez_charts
-description: "A new Flutter project."
+description: "Flutter candle chart"
 version: 0.0.1
-homepage: none
+homepage: https://github.com/t-toum/ez_charts
 
 environment:
   sdk: ^3.7.2

@@ -1,39 +1,68 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# ez_charts
+Maybe this is the best k chart in Flutter.Support drag,scale,long press,fling.And easy to use.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+## display
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+#### image
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+<img src="https://github.com/mafanwei/k_chart/blob/master/example/images/Screenshot1.jpg" width="375" alt="Screenshot"/>
 
-## Features
+<img src="https://github.com/mafanwei/k_chart/blob/master/example/images/Screenshot2.jpg" width="375" alt="Screenshot"/>
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+<img src="https://github.com/mafanwei/k_chart/blob/master/example/images/Screenshot3.jpeg" width="375" alt="Screenshot"/>
 
-## Getting started
+#### gif
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+![demo](https://github.com/mafanwei/k_chart/blob/master/example/images/demo.gif)
 
-## Usage
+![demo](https://github.com/mafanwei/k_chart/blob/master/example/images/demo2.gif)
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+## Getting Started
+#### Install
+```
+dependencies:
+  ez_charts: ^0.0.1
+```
+<!-- or use latest：
+```
+k_chart:
+    git:
+      url: https://github.com/mafanwei/k_chart
+``` -->
+#### Usage
 
+**When you change the data, you must call this:**
 ```dart
-const like = 'sample';
+DataUtil.calculate(datas); //This function has some optional parameters: n is BOLL N-day closing price. k is BOLL param.
 ```
 
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+use k line chart:
+```dart
+SizedBox(
+              height: 450,
+              width: double.infinity,
+              child: EzChartsWidget(
+                chartStyle, // Required for styling purposes
+                chartColors,// Required for styling purposes
+                datas,// Required，Data must be an ordered list，(history=>now)
+                isLine: isLine,// Decide whether it is k-line or time-sharing
+                mainState: _mainState,// Decide what the main view shows
+                secondaryState: _secondaryState,// Decide what the sub view shows
+                fixedLength: 2,// Displayed decimal precision
+                timeFormat: TimeFormat.YEAR_MONTH_DAY,
+                onLoadMore: (bool a) {},// Called when the data scrolls to the end. When a is true, it means the user is pulled to the end of the right side of the data. When a
+                // is false, it means the user is pulled to the end of the left side of the data.
+                maDayList: [5,10,20],// Display of MA,This parameter must be equal to DataUtil.calculate‘s maDayList
+                volHidden: false,// hide volume
+                showNowPrice: true,// show now price
+                isOnDrag: (isDrag){},// true is on Drag.Don't load data while Draging.
+                onSecondaryTap:(){},// on secondary rect taped.
+                isTrendLine: false, // You can use Trendline by long-pressing and moving your finger after setting true to isTrendLine property. 
+                xFrontPadding: 100 // padding in front
+              ),
+            ),
+```
+use depth chart:
+```dart
+DepthChart(_bids, _asks, chartColors) //Note: Datas must be an ordered list，
+```
