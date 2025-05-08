@@ -1,122 +1,225 @@
-import 'package:ez_charts/ez_chart.dart';
+import 'dart:convert';
 import 'package:ez_charts/ez_charts.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-import 'mock_data.dart';
+void main() => runApp(MyApp());
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final List<CandleData> _data = MockDataTesla.candles;
-  bool _darkMode = true;
-  bool _showAverage = false;
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: _darkMode ? Brightness.dark : Brightness.light,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Interactive Chart Demo"),
-          actions: [
-            IconButton(
-              icon: Icon(_darkMode ? Icons.dark_mode : Icons.light_mode),
-              onPressed: () => setState(() => _darkMode = !_darkMode),
-            ),
-            IconButton(
-              icon: Icon(
-                _showAverage ? Icons.show_chart : Icons.bar_chart_outlined,
+      title: 'Flutter Demo',
+      theme: ThemeData(),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, this.title});
+  final String? title;
+  @override
+  State<StatefulWidget> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<EzLineEntity>? datas;
+  bool showLoading = true;
+  MainState _mainState = MainState.MA;
+  bool _volHidden = false;
+  SecondaryState _secondaryState = SecondaryState.MACD;
+  bool isLine = true;
+  bool _hideGrid = true;
+  bool _showNowPrice = true;
+  bool isChangeUI = false;
+  bool _isTrendLine = false;
+  bool _priceLeft = true;
+  VerticalTextAlignment _verticalTextAlignment = VerticalTextAlignment.left;
+
+  ChartStyle chartStyle = ChartStyle();
+  ChartColors chartColors = ChartColors();
+
+  @override
+  void initState() {
+    super.initState();
+    getData('1day');
+  }
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      children: <Widget>[
+        Stack(
+          children: <Widget>[
+            SizedBox(
+              height: 450,
+              width: double.infinity,
+              child: EzChartsWidget(
+                datas,
+                chartStyle,
+                chartColors,
+                isLine: isLine,
+                isTrendLine: _isTrendLine,
+                mainState: _mainState,
+                volHidden: _volHidden,
+                secondaryState: _secondaryState,
+                fixedLength: 2,
+                timeFormat: TimeFormat.YEAR_MONTH_DAY,
+                showNowPrice: _showNowPrice,
+                hideGrid: _hideGrid,
+                isTapShowInfoDialog: false,
+                verticalTextAlignment: _verticalTextAlignment,
+                maDayList: [1, 100, 1000],
               ),
-              onPressed: () {
-                setState(() => _showAverage = !_showAverage);
-                if (_showAverage) {
-                  _computeTrendLines();
-                } else {
-                  _removeTrendLines();
-                }
-              },
             ),
+            if (showLoading)
+              Container(
+                width: double.infinity,
+                height: 450,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              ),
           ],
         ),
-        body: SafeArea(
-          minimum: const EdgeInsets.all(24.0),
-          child: EzChart(
-            /** Only [candles] is required */
-            candles: _data,
-            // timeLabel: (int timestamp, int visibleDataCount){
-            //   print("timestamp: $timestamp, visibleDataCount: $visibleDataCount");
-            //   return "";
-            // },
-            /** Uncomment the following for examples on optional parameters */
-
-            /** Example styling */
-            // style: ChartStyle(
-            //   priceGainColor: Colors.teal[200]!,
-            //   priceLossColor: Colors.blueGrey,
-            //   volumeColor: Colors.teal.withOpacity(0.8),
-            //   trendLineStyles: [
-            //     Paint()
-            //       ..strokeWidth = 2.0
-            //       ..strokeCap = StrokeCap.round
-            //       ..color = Colors.deepOrange,
-            //     Paint()
-            //       ..strokeWidth = 4.0
-            //       ..strokeCap = StrokeCap.round
-            //       ..color = Colors.orange,
-            //   ],
-            //   priceGridLineColor: Colors.blue[200]!,
-            //   priceLabelStyle: TextStyle(color: Colors.blue[200]),
-            //   timeLabelStyle: TextStyle(color: Colors.blue[200]),
-            //   selectionHighlightColor: Colors.red.withOpacity(0.2),
-            //   overlayBackgroundColor: Colors.red[900]!.withOpacity(0.6),
-            //   overlayTextStyle: TextStyle(color: Colors.red[100]),
-            //   timeLabelHeight: 32,
-            //   volumeHeightFactor: 0.2, // volume area is 20% of total height
-            // ),
-            /** Customize axis labels */
-            // timeLabel: (timestamp, visibleDataCount) => "📅",
-            // priceLabel: (price) => "${price.round()} 💎",
-            /** Customize overlay (tap and hold to see it)
-             ** Or return an empty object to disable overlay info. */
-            // overlayInfo: (candle) => {
-            //   "💎": "🤚    ",
-            //   "Hi": "${candle.high?.toStringAsFixed(2)}",
-            //   "Lo": "${candle.low?.toStringAsFixed(2)}",
-            // },
-            /** Callbacks */
-            // onTap: (candle) => print("user tapped on $candle"),
-            // onCandleResize: (width) => print("each candle is $width wide"),
-          ),
-        ),
-      ),
+        buildButtons(),
+      ],
     );
   }
 
-  _computeTrendLines() {
-    final ma7 = CandleData.computeMA(_data, 7);
-    final ma30 = CandleData.computeMA(_data, 30);
-    final ma90 = CandleData.computeMA(_data, 90);
-
-    for (int i = 0; i < _data.length; i++) {
-      _data[i].trends = [ma7[i], ma30[i], ma90[i]];
-    }
+  Widget buildButtons() {
+    return Wrap(
+      alignment: WrapAlignment.spaceEvenly,
+      children: <Widget>[
+        button("Time Mode", onPressed: () => isLine = true),
+        button("K Line Mode", onPressed: () => isLine = false),
+        button("TrendLine", onPressed: () => _isTrendLine = !_isTrendLine),
+        button("Line:MA", onPressed: () => _mainState = MainState.MA),
+        button("Line:BOLL", onPressed: () => _mainState = MainState.BOLL),
+        button("Hide Line", onPressed: () => _mainState = MainState.NONE),
+        button(
+          "Secondary Chart:MACD",
+          onPressed: () => _secondaryState = SecondaryState.MACD,
+        ),
+        button(
+          "Secondary Chart:KDJ",
+          onPressed: () => _secondaryState = SecondaryState.KDJ,
+        ),
+        button(
+          "Secondary Chart:RSI",
+          onPressed: () => _secondaryState = SecondaryState.RSI,
+        ),
+        button(
+          "Secondary Chart:WR",
+          onPressed: () => _secondaryState = SecondaryState.WR,
+        ),
+        button(
+          "Secondary Chart:CCI",
+          onPressed: () => _secondaryState = SecondaryState.CCI,
+        ),
+        button(
+          "Secondary Chart:Hide",
+          onPressed: () => _secondaryState = SecondaryState.NONE,
+        ),
+        button(
+          _volHidden ? "Show Vol" : "Hide Vol",
+          onPressed: () => _volHidden = !_volHidden,
+        ),
+        button(
+          _hideGrid ? "Show Grid" : "Hide Grid",
+          onPressed: () => _hideGrid = !_hideGrid,
+        ),
+        button(
+          _showNowPrice ? "Hide Now Price" : "Show Now Price",
+          onPressed: () => _showNowPrice = !_showNowPrice,
+        ),
+        button(
+          "Customize UI",
+          onPressed: () {
+            setState(() {
+              isChangeUI = !isChangeUI;
+              if (isChangeUI) {
+                chartColors.selectBorderColor = Colors.red;
+                chartColors.selectFillColor = Colors.red;
+                chartColors.lineFillColor = Colors.red;
+                chartColors.kLineColor = Colors.yellow;
+              } else {
+                chartColors.selectBorderColor = Color(0xff6C7A86);
+                chartColors.selectFillColor = Color(0xff0D1722);
+                chartColors.lineFillColor = Color(0x554C86CD);
+                chartColors.kLineColor = Color(0xff4C86CD);
+              }
+            });
+          },
+        ),
+        button(
+          "Change PriceTextPaint",
+          onPressed:
+              () => setState(() {
+                _priceLeft = !_priceLeft;
+                if (_priceLeft) {
+                  _verticalTextAlignment = VerticalTextAlignment.left;
+                } else {
+                  _verticalTextAlignment = VerticalTextAlignment.right;
+                }
+              }),
+        ),
+      ],
+    );
   }
 
-  _removeTrendLines() {
-    for (final data in _data) {
-      data.trends = [];
+  Widget button(String text, {VoidCallback? onPressed}) {
+    return TextButton(
+      onPressed: () {
+        if (onPressed != null) {
+          onPressed();
+          setState(() {});
+        }
+      },
+      style: TextButton.styleFrom(
+        // primary: Colors.white,
+        minimumSize: const Size(88, 44),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+        ),
+        backgroundColor: Colors.blue,
+      ),
+      child: Text(text),
+    );
+  }
+
+  Future<void> getData(String period) async {
+    try {
+      String url =
+          'https://api.huobi.br.com/market/history/kline?period=$period&size=300&symbol=btcusdt';
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final Map parseJson =
+            json.decode(response.body) as Map<dynamic, dynamic>;
+        final list = parseJson['data'] as List<dynamic>;
+        datas =
+            list
+                .map(
+                  (item) => EzLineEntity.fromJson(item as Map<String, dynamic>),
+                )
+                .toList()
+                .reversed
+                .toList()
+                .cast<EzLineEntity>();
+        DataUtil.calculate(datas!);
+        showLoading = false;
+        setState(() {});
+      } else {
+        showLoading = false;
+        setState(() {});
+        debugPrint('### datas error ');
+      }
+    } catch (err) {
+      showLoading = false;
+      setState(() {});
+      debugPrint('### datas error ');
     }
   }
 }
