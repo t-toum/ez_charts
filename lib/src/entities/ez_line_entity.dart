@@ -1,11 +1,6 @@
 import 'package:ez_charts/src/entities/ez_entity.dart';
 
 class EzLineEntity extends EzEntity {
-  late double open;
-  late double high;
-  late double low;
-  late double close;
-  late double vol;
   late double? amount;
   double? change;
   double? ratio;
@@ -13,15 +8,21 @@ class EzLineEntity extends EzEntity {
 
   EzLineEntity.fromCustom({
     this.amount,
-    required this.open,
-    required this.close,
+    required double open,
+    required double close,
     this.change,
     this.ratio,
     required this.time,
-    required this.high,
-    required this.low,
-    required this.vol,
-  });
+    required double high,
+    required double low,
+    required double vol,
+  }) {
+    this.open = open;
+    this.close = close;
+    this.high = high;
+    this.low = low;
+    this.vol = vol;
+  }
 
   EzLineEntity.fromJson(Map<String, dynamic> json) {
     open = json['open']?.toDouble() ?? 0;
@@ -31,7 +32,6 @@ class EzLineEntity extends EzEntity {
     vol = json['vol']?.toDouble() ?? 0;
     amount = json['amount']?.toDouble();
     int? tempTime = json['time']?.toInt();
-    //兼容火币数据
     if (tempTime == null) {
       tempTime = json['id']?.toInt() ?? 0;
       tempTime = tempTime! * 1000;

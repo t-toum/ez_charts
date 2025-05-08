@@ -74,7 +74,7 @@ class EzChartsWidget extends StatefulWidget {
     this.showNowPrice = true,
     this.showInfoDialog = true,
     this.materialInfoDialog = true,
-    this.translations = kChartTranslations,
+    this.translations = ezChartTranslations,
     this.timeFormat = TimeFormat.YEAR_MONTH_DAY,
     this.onLoadMore,
     this.fixedLength = 2,
@@ -140,10 +140,10 @@ class _EzChartsWidgetState extends State<EzChartsWidget>
     final painter = ChartPainter(
       widget.chartStyle,
       widget.chartColors,
-      lines: lines, //For TrendLine
+      lines: lines,
       xFrontPadding: widget.xFrontPadding,
-      isTrendLine: widget.isTrendLine, //For TrendLine
-      selectY: mSelectY, //For TrendLine
+      isTrendLine: widget.isTrendLine,
+      selectY: mSelectY,
       datas: widget.datas,
       scaleX: mScaleX,
       scrollX: mScrollX,

@@ -321,7 +321,6 @@ abstract class BaseChartPainter extends CustomPainter {
     }
   }
 
-  ///@param position 索引值
   double getX(int position) => position * mPointWidth + mPointWidth / 2;
 
   EzLineEntity getItem(int position) {

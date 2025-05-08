@@ -4,3 +4,4 @@ linter:
   rules:
     # camel_case_types: false
     constant_identifier_names: false
+    non_constant_identifier_names: false

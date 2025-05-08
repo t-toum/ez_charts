@@ -41,13 +41,12 @@ class ChartPainter extends BaseChartPainter {
   List<int> maDayList;
   final ChartColors chartColors;
   late Paint selectPointPaint, selectorBorderPaint, nowPricePaint;
-  final ChartStyle chartStyle;
   final bool hideGrid;
   final bool showNowPrice;
   final VerticalTextAlignment verticalTextAlignment;
 
   ChartPainter(
-    this.chartStyle,
+    ChartStyle chartStyle,
     this.chartColors, {
     required this.lines, //For TrendLine
     required this.isTrendLine, //For TrendLine

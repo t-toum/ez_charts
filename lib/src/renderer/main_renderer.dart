@@ -15,10 +15,8 @@ class MainRenderer extends BaseChartRenderer<CandleEntity> {
   late double mCandleLineWidth;
   MainState state;
   bool isLine;
-
-  //绘制的内容区域
   late Rect _contentRect;
-  double _contentPadding = 5.0;
+  final double _contentPadding = 5.0;
   List<int> maDayList;
   final ChartStyle chartStyle;
   final ChartColors chartColors;
