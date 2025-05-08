@@ -1,53 +1,53 @@
 import 'package:flutter/material.dart' show Color;
 
 class ChartColors {
-  List<Color> bgColor = [Color(0xff18191d), Color(0xff18191d)];
+  List<Color> bgColor = const [Color(0xff18191d), Color(0xff18191d)];
 
-  Color kLineColor = Color(0xff4C86CD);
-  Color lineFillColor = Color(0x554C86CD);
-  Color lineFillInsideColor = Color(0x00000000);
-  Color ma5Color = Color(0xffC9B885);
-  Color ma10Color = Color(0xff6CB0A6);
-  Color ma30Color = Color(0xff9979C6);
-  Color upColor = Color(0xff4DAA90);
-  Color dnColor = Color(0xffC15466);
-  Color volColor = Color(0xff4729AE);
+  Color kLineColor = const Color(0xff4C86CD);
+  Color lineFillColor = const Color(0x554C86CD);
+  Color lineFillInsideColor = const Color(0x00000000);
+  Color ma5Color = const Color(0xffC9B885);
+  Color ma10Color = const Color(0xff6CB0A6);
+  Color ma30Color = const Color(0xff9979C6);
+  Color upColor = const Color(0xff4DAA90);
+  Color dnColor = const Color(0xffC15466);
+  Color volColor = const Color(0xff4729AE);
 
-  Color macdColor = Color(0xff4729AE);
-  Color difColor = Color(0xffC9B885);
-  Color deaColor = Color(0xff6CB0A6);
+  Color macdColor = const Color(0xff4729AE);
+  Color difColor = const Color(0xffC9B885);
+  Color deaColor = const Color(0xff6CB0A6);
 
-  Color kColor = Color(0xffC9B885);
-  Color dColor = Color(0xff6CB0A6);
-  Color jColor = Color(0xff9979C6);
-  Color rsiColor = Color(0xffC9B885);
+  Color kColor = const Color(0xffC9B885);
+  Color dColor = const Color(0xff6CB0A6);
+  Color jColor = const Color(0xff9979C6);
+  Color rsiColor = const Color(0xffC9B885);
 
-  Color defaultTextColor = Color(0xff60738E);
+  Color defaultTextColor = const Color(0xff60738E);
 
-  Color nowPriceUpColor = Color(0xff4DAA90);
-  Color nowPriceDnColor = Color(0xffC15466);
-  Color nowPriceTextColor = Color(0xffffffff);
+  Color nowPriceUpColor = const Color(0xff4DAA90);
+  Color nowPriceDnColor = const Color(0xffC15466);
+  Color nowPriceTextColor = const Color(0xffffffff);
 
-  Color depthBuyColor = Color(0xff60A893);
-  Color depthSellColor = Color(0xffC15866);
+  Color depthBuyColor = const Color(0xff60A893);
+  Color depthSellColor = const Color(0xffC15866);
 
-  Color selectBorderColor = Color(0xff6C7A86);
+  Color selectBorderColor = const Color(0xff6C7A86);
 
-  Color selectFillColor = Color(0xff0D1722);
+  Color selectFillColor = const Color(0xff0D1722);
 
-  Color gridColor = Color(0xff4c5c74);
+  Color gridColor = const Color(0xff4c5c74);
 
-  Color infoWindowNormalColor = Color(0xffffffff);
-  Color infoWindowTitleColor = Color(0xffffffff);
-  Color infoWindowUpColor = Color(0xff00ff00);
-  Color infoWindowDnColor = Color(0xffff0000);
+  Color infoWindowNormalColor = const Color(0xffffffff);
+  Color infoWindowTitleColor = const Color(0xffffffff);
+  Color infoWindowUpColor = const Color(0xff00ff00);
+  Color infoWindowDnColor = const Color(0xffff0000);
 
-  Color hCrossColor = Color(0xffffffff);
-  Color vCrossColor = Color(0x1Effffff);
-  Color crossTextColor = Color(0xffffffff);
+  Color hCrossColor = const Color(0xffffffff);
+  Color vCrossColor = const Color(0x1Effffff);
+  Color crossTextColor = const Color(0xffffffff);
 
-  Color maxColor = Color(0xffffffff);
-  Color minColor = Color(0xffffffff);
+  Color maxColor = const Color(0xffffffff);
+  Color minColor = const Color(0xffffffff);
 
   Color getMAColor(int index) {
     switch (index % 3) {

@@ -3,7 +3,7 @@ import 'package:ez_charts/ez_charts.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -46,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     getData('1day');
   }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -59,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: EzChartsWidget(
                 datas,
                 chartStyle,
-                chartColors..maxColor = Colors.red,
+                chartColors,
                 isLine: isLine,
                 isTrendLine: _isTrendLine,
                 mainState: _mainState,
@@ -71,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 hideGrid: _hideGrid,
                 isTapShowInfoDialog: false,
                 verticalTextAlignment: _verticalTextAlignment,
-                maDayList: [1, 100, 1000],
+                maDayList: const [1, 100, 1000],
                 // showMaxPrice: false,
                 // showMinPrice: false,
               ),
@@ -147,25 +148,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 chartColors.lineFillColor = Colors.red;
                 chartColors.kLineColor = Colors.yellow;
               } else {
-                chartColors.selectBorderColor = Color(0xff6C7A86);
-                chartColors.selectFillColor = Color(0xff0D1722);
-                chartColors.lineFillColor = Color(0x554C86CD);
-                chartColors.kLineColor = Color(0xff4C86CD);
+                chartColors.selectBorderColor = const Color(0xff6C7A86);
+                chartColors.selectFillColor = const Color(0xff0D1722);
+                chartColors.lineFillColor = const Color(0x554C86CD);
+                chartColors.kLineColor = const Color(0xff4C86CD);
               }
             });
           },
         ),
         button(
           "Change PriceTextPaint",
-          onPressed:
-              () => setState(() {
-                _priceLeft = !_priceLeft;
-                if (_priceLeft) {
-                  _verticalTextAlignment = VerticalTextAlignment.left;
-                } else {
-                  _verticalTextAlignment = VerticalTextAlignment.right;
-                }
-              }),
+          onPressed: () => setState(() {
+            _priceLeft = !_priceLeft;
+            if (_priceLeft) {
+              _verticalTextAlignment = VerticalTextAlignment.left;
+            } else {
+              _verticalTextAlignment = VerticalTextAlignment.right;
+            }
+          }),
         ),
       ],
     );
@@ -201,15 +201,14 @@ class _MyHomePageState extends State<MyHomePage> {
         final Map parseJson =
             json.decode(response.body) as Map<dynamic, dynamic>;
         final list = parseJson['data'] as List<dynamic>;
-        datas =
-            list
-                .map(
-                  (item) => EzLineEntity.fromJson(item as Map<String, dynamic>),
-                )
-                .toList()
-                .reversed
-                .toList()
-                .cast<EzLineEntity>();
+        datas = list
+            .map(
+              (item) => EzLineEntity.fromJson(item as Map<String, dynamic>),
+            )
+            .toList()
+            .reversed
+            .toList()
+            .cast<EzLineEntity>();
         DataUtil.calculate(datas!);
         showLoading = false;
         setState(() {});

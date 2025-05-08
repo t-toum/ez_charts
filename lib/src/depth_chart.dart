@@ -116,12 +116,12 @@ class DepthChartPainter extends CustomPainter {
         Paint()
           ..isAntiAlias = true
           ..color =
-              (mBuyPathColor ?? chartColors.depthBuyColor.withValues(alpha: 0.2));
+              (mBuyPathColor ?? chartColors.depthBuyColor.withOpacity(0.2));
     mSellPathPaint ??=
         Paint()
           ..isAntiAlias = true
           ..color =
-              (mSellPathColor ?? chartColors.depthSellColor.withValues(alpha: 0.2));
+              (mSellPathColor ?? chartColors.depthSellColor.withOpacity(0.2));
     mBuyPath ??= Path();
     mSellPath ??= Path();
     init();
