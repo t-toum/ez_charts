@@ -45,6 +45,9 @@ class ChartPainter extends BaseChartPainter {
   final bool showNowPrice;
   final VerticalTextAlignment verticalTextAlignment;
 
+  final bool showMaxPrice;
+  final bool showMinPrice;
+
   ChartPainter(
     ChartStyle chartStyle,
     this.chartColors, {
@@ -57,7 +60,9 @@ class ChartPainter extends BaseChartPainter {
     required isLongPass,
     required selectX,
     required xFrontPadding,
-    isOnTap,
+    required this.showMaxPrice,
+    required this.showMinPrice,
+    bool isOnTap = false,
     isTapShowInfoDialog,
     required this.verticalTextAlignment,
     mainState,
@@ -394,64 +399,84 @@ class ChartPainter extends BaseChartPainter {
     double lineSize = 20;
     double lineToTextOffset = 5;
 
-    Paint linePaint =
-        Paint()
-          ..strokeWidth = 1
-          ..color = chartColors.minColor;
-
+    Paint linePaint = Paint()..strokeWidth = 1;
     double x = translateXtoX(getX(mMainMinIndex));
     double y = getMainY(mMainLowMinValue);
-    if (x < mWidth / 2) {
-      TextPainter tp = getTextPainter(
-        mMainLowMinValue.toStringAsFixed(fixedLength),
-        chartColors.minColor,
-      );
 
-      canvas.drawLine(Offset(x, y), Offset(x + lineSize, y), linePaint);
+    //Min price
+    if (showMinPrice) {
+      if (x < mWidth / 2) {
+        TextPainter tp = getTextPainter(
+          mMainLowMinValue.toStringAsFixed(fixedLength),
+          chartColors.minColor,
+        );
 
-      tp.paint(
-        canvas,
-        Offset(x + lineSize + lineToTextOffset, y - tp.height / 2),
-      );
-    } else {
-      TextPainter tp = getTextPainter(
-        mMainLowMinValue.toStringAsFixed(fixedLength),
-        chartColors.minColor,
-      );
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x + lineSize, y),
+          linePaint..color = chartColors.minColor,
+        );
 
-      canvas.drawLine(Offset(x, y), Offset(x - lineSize, y), linePaint);
+        tp.paint(
+          canvas,
+          Offset(x + lineSize + lineToTextOffset, y - tp.height / 2),
+        );
+      } else {
+        TextPainter tp = getTextPainter(
+          mMainLowMinValue.toStringAsFixed(fixedLength),
+          chartColors.minColor,
+        );
 
-      tp.paint(
-        canvas,
-        Offset(x - tp.width - lineSize - lineToTextOffset, y - tp.height / 2),
-      );
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x - lineSize, y),
+          linePaint..color = chartColors.minColor,
+        );
+
+        tp.paint(
+          canvas,
+          Offset(x - tp.width - lineSize - lineToTextOffset, y - tp.height / 2),
+        );
+      }
     }
-    x = translateXtoX(getX(mMainMaxIndex));
-    y = getMainY(mMainHighMaxValue);
-    if (x < mWidth / 2) {
-      TextPainter tp = getTextPainter(
-        mMainHighMaxValue.toStringAsFixed(fixedLength),
-        chartColors.maxColor,
-      );
 
-      canvas.drawLine(Offset(x, y), Offset(x + lineSize, y), linePaint);
+    //Max price
+    if (showMaxPrice) {
+      x = translateXtoX(getX(mMainMaxIndex));
+      y = getMainY(mMainHighMaxValue);
+      if (x < mWidth / 2) {
+        TextPainter tp = getTextPainter(
+          mMainHighMaxValue.toStringAsFixed(fixedLength),
+          chartColors.maxColor,
+        );
 
-      tp.paint(
-        canvas,
-        Offset(x + lineSize + lineToTextOffset, y - tp.height / 2),
-      );
-    } else {
-      TextPainter tp = getTextPainter(
-        mMainHighMaxValue.toStringAsFixed(fixedLength),
-        chartColors.maxColor,
-      );
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x + lineSize, y),
+          linePaint..color = chartColors.maxColor,
+        );
 
-      canvas.drawLine(Offset(x, y), Offset(x - lineSize, y), linePaint);
+        tp.paint(
+          canvas,
+          Offset(x + lineSize + lineToTextOffset, y - tp.height / 2),
+        );
+      } else {
+        TextPainter tp = getTextPainter(
+          mMainHighMaxValue.toStringAsFixed(fixedLength),
+          chartColors.maxColor,
+        );
 
-      tp.paint(
-        canvas,
-        Offset(x - tp.width - lineSize - lineToTextOffset, y - tp.height / 2),
-      );
+        canvas.drawLine(
+          Offset(x, y),
+          Offset(x - lineSize, y),
+          linePaint..color = chartColors.maxColor,
+        );
+
+        tp.paint(
+          canvas,
+          Offset(x - tp.width - lineSize - lineToTextOffset, y - tp.height / 2),
+        );
+      }
     }
   }
 

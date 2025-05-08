@@ -57,6 +57,9 @@ class EzChartsWidget extends StatefulWidget {
   final bool isTrendLine;
   final double xFrontPadding;
 
+  final bool showMaxPrice;
+  final bool showMinPrice;
+
   const EzChartsWidget(
     this.datas,
     this.chartStyle,
@@ -84,6 +87,8 @@ class EzChartsWidget extends StatefulWidget {
     this.flingCurve = Curves.decelerate,
     this.isOnDrag,
     this.verticalTextAlignment = VerticalTextAlignment.left,
+    this.showMaxPrice = true,
+    this.showMinPrice = true,
   });
 
   @override
@@ -161,6 +166,8 @@ class _EzChartsWidgetState extends State<EzChartsWidget>
       fixedLength: widget.fixedLength,
       maDayList: widget.maDayList,
       verticalTextAlignment: widget.verticalTextAlignment,
+      showMaxPrice: widget.showMaxPrice,
+      showMinPrice: widget.showMinPrice,
     );
 
     return LayoutBuilder(

@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: EzChartsWidget(
                 datas,
                 chartStyle,
-                chartColors,
+                chartColors..maxColor = Colors.red,
                 isLine: isLine,
                 isTrendLine: _isTrendLine,
                 mainState: _mainState,
@@ -72,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 isTapShowInfoDialog: false,
                 verticalTextAlignment: _verticalTextAlignment,
                 maDayList: [1, 100, 1000],
+                // showMaxPrice: false,
+                // showMinPrice: false,
               ),
             ),
             if (showLoading)
