@@ -6,3 +6,4 @@ export 'src/utils/index.dart';
 export 'src/entities/index.dart';
 export 'src/renderer/index.dart';
 export 'src/extensions/num_ext.dart';
+export 'src/chart_translations.dart';

@@ -1,6 +1,6 @@
 name: ez_charts
 description: "Flutter candle chart"
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/t-toum/ez_charts
 
 environment:
